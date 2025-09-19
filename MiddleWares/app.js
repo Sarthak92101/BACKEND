@@ -25,6 +25,16 @@ app.get("/", (req, res) => {
 app.get("/Random", (req, res) => {
   res.status(404).send("Hi, I am Nanu")
 })
+
+app.get("/err",(req,res)=>{
+  abcd=abcd;
+})
+
+app.use((err,req,res,next)=>{
+  console.log("-----ERROR-----");
+  next(err);
+})
+
 app.use((req, res) => {
   res.send("Page not found");
 })
