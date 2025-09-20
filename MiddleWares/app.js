@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const ExpressError = require("./ExpressError")
 
 // app.use((req,res,next)=>{
 //  console.log ("Hii I am Middleware")
@@ -11,7 +12,7 @@ const TokenCheck = (req, res, next) => {
   if (token === "giveaccess") {
     next();
   } else {
-    res.send("ACCESS DENIED")
+    throw new ExpressError(401, "ACCESS DENIED")
   }
 
 };
@@ -26,13 +27,17 @@ app.get("/Random", (req, res) => {
   res.status(404).send("Hi, I am Nanu")
 })
 
-app.get("/err",(req,res)=>{
-  abcd=abcd;
+app.get("/err", (req, res) => {
+  abcd = abcd;
 })
 
-app.use((err,req,res,next)=>{
-  console.log("-----ERROR-----");
-  next(err);
+app.get("/admin",(req,res)=>{
+  throw new ExpressError(401,"Some new kind of ERROR")
+})
+
+app.use((err, req, res, next) => {
+  let { status = 500, message = "SOME ERROR" } = err;
+  res.status(status).send(message);
 })
 
 app.use((req, res) => {
